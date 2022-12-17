@@ -1,4 +1,5 @@
 import { Router, Response, Request } from 'express';
+import pizzas from './pizzas/pizzas.routes';
 import MessageResponse from '../interfaces/MessageResponse';
 
 const router = Router();
@@ -8,5 +9,7 @@ router.get('/', (req: Request, res: Response<MessageResponse>) => {
 		message: 'Api route',
 	});
 });
+
+router.use('/pizzas', pizzas);
 
 export default router;
