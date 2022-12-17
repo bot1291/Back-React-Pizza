@@ -5,7 +5,7 @@ const router = Router();
 
 router.get('/', (req: Request, res: Response<MessageResponse>) => {
 	res.json({
-		message: 'Api path',
+		message: 'Api route',
 	});
 });
 
