@@ -16,7 +16,7 @@ app.use(json());
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.get('/', (_req: Request, res: Response) => {
 	res.json({
-		message: 'Started page',
+		message: 'Start page',
 	});
 });
 
