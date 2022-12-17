@@ -14,6 +14,5 @@
 		"strictPropertyInitialization": false,
 		"noUncheckedIndexedAccess": true,
 		"noImplicitReturns": true
-	},
-	"include": ["src/**/*"]
+	}
 }
