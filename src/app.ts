@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import { config } from 'dotenv';
 import { errorHandler, notFound } from './middlewares';
+import api from './api';
 
 config();
 
@@ -21,7 +22,7 @@ app.get('/', (_req: Request, res: Response) => {
 	});
 });
 
-// app.use('/api');
+app.use('/api', api);
 
 app.use(notFound);
 app.use(errorHandler);
