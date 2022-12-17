@@ -3,6 +3,7 @@ import express, { json, Response, Request } from 'express';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import { config } from 'dotenv';
+import { errorHandler, notFound } from './middlewares';
 
 config();
 
@@ -20,6 +21,9 @@ app.get('/', (_req: Request, res: Response) => {
 	});
 });
 
-app.use('/api');
+// app.use('/api');
+
+app.use(notFound);
+app.use(errorHandler);
 
 export default app;

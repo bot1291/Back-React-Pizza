@@ -2,28 +2,27 @@ import request from 'supertest';
 import app from './app';
 
 describe('app', () => {
-	it('responds with a not found message', async () => {
+	it('responds with a not found message', (done) => {
 		request(app)
-			.get('/random-path')
+			.get('/what-is-this-even')
 			.set('Accept', 'application/json')
-			.expect('Content-Type', /json/)
-			.expect(404)
-			.then((response) => {
-				expect(response.body).toHaveProperty('message');
-			});
+			.expect('Content-Type', 'text/html; charset=utf-8')
+			.expect(404, done);
 	});
 });
 
 describe('GET /', () => {
-	it('responds with a json message', async () => {
+	it('responds with a json message', (done) => {
 		request(app)
 			.get('/')
 			.set('Accept', 'application/json')
 			.expect('Content-Type', /json/)
-			.expect(202)
-			.then((response) => {
-				expect(response.body).toHaveProperty('message');
-				expect(response.body.message).toBe('Start page');
-			});
+			.expect(
+				200,
+				{
+					message: 'Start page',
+				},
+				done
+			);
 	});
 });
