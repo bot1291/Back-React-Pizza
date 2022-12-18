@@ -10,7 +10,8 @@ router.get(
 	'/:id',
 	validateRequest({
 		params: Pizza,
-	})
+	}),
+	PizzaHandler.getOne
 );
 router.post('/');
 router.put(
