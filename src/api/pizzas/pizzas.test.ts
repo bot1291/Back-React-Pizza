@@ -2,6 +2,14 @@ import request from 'supertest';
 import app from '../../app';
 import { Pizzas } from './pizzas.model';
 
+let id = '';
+const testPizza = {
+	currentPrice: 100,
+	image: 'https://cdn.fishki.net/upload/post/2020/11/11/3470626/324e458e86be1f4ab97ee5a667f8fa1a.jpg',
+	title: 'Пицца',
+	types: ['Сырная'],
+};
+
 beforeAll(async () => {
 	try {
 		await Pizzas.drop();
@@ -23,18 +31,12 @@ describe('GET /api/pizzas', () => {
 			}));
 });
 
-let id = '';
 describe('POST /api/pizzas', () => {
 	it('responds with a created pizza', async () =>
 		request(app)
 			.post('/api/pizzas')
 			.set('Accept', 'applicatipn/json')
-			.send({
-				currentPrice: 100,
-				image: 'https://cdn.fishki.net/upload/post/2020/11/11/3470626/324e458e86be1f4ab97ee5a667f8fa1a.jpg',
-				title: 'Пицца',
-				types: ['Сырная'],
-			})
+			.send(testPizza)
 			.expect('Content-Type', /json/)
 			.expect(201)
 			.then((response) => {
@@ -105,11 +107,12 @@ describe('PUT /api/pizzas/:id', () => {
 			.put(`/api/pizzas/${id}`)
 			.set('Accept', 'application/json')
 			.send({
+				...testPizza,
 				rating: 3,
 				types: ['Сырная', 'Мясная'],
 			})
 			.expect('Content-Type', /json/)
-			.expect(200)
+			.expect(201)
 			.then((response) => {
 				expect(response.body).toHaveProperty('_id');
 				expect(response.body._id).toBe(id);
@@ -157,5 +160,40 @@ describe('GET /api/pizzas', () => {
 			.then((response) => {
 				expect(response.body).toHaveProperty('length');
 				expect(response.body.length).toBe(1);
+			}));
+});
+
+describe('DELETE /api/pizzas/:id', () => {
+	it('responds with an successful deletion of a message', async () =>
+		request(app)
+			.delete(`/api/pizzas/${id}`)
+			.set('Accept', 'application/json')
+			.expect('Content-Type', /json/)
+			.expect(200)
+			.then((response) => {
+				expect(response.body).toHaveProperty('message');
+				expect(response.body.message).toBe(
+					'Pizza successfully has deleted'
+				);
+				expect(response.body).toHaveProperty('id');
+				expect(response.body.id).toBe(id);
+			}));
+	it('responds with an incorrect id error', async () =>
+		request(app)
+			.delete('/api/pizzas/incorrect_format_id')
+			.set('Accept', 'application/json')
+			.expect('Content-Type', /json/)
+			.expect(422)
+			.then((response) => {
+				expect(response.body).toHaveProperty('message');
+			}));
+	it('responds with a not found id error', async () =>
+		request(app)
+			.delete('/api/pizzas/639dadb976b8603fcc1111eb')
+			.set('Accept', 'application/json')
+			.expect('Content-Type', /json/)
+			.expect(404)
+			.then((response) => {
+				expect(response.body).toHaveProperty('message');
 			}));
 });

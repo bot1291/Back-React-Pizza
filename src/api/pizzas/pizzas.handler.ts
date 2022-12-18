@@ -78,6 +78,7 @@ class PizzaHandler {
 				res.status(404);
 				throw new Error(`Pizza with id ${req.params.id} not found`);
 			}
+			res.status(201);
 			res.json(result.value);
 		} catch (error) {
 			next(error);
@@ -99,7 +100,6 @@ class PizzaHandler {
 					`Pizza with id ${req.params.id} not found or already deleted`
 				);
 			}
-			res.status(204);
 			res.json({
 				message: 'Pizza successfully has deleted',
 				id: req.params.id,
