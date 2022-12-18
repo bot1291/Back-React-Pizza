@@ -90,7 +90,7 @@ describe('GET /api/pizzas/:id', () => {
 			}));
 	it('responds with an incorrect error id', async () =>
 		request(app)
-			.get('/api/pizzas/id_that_dont_exist')
+			.get('/api/pizzas/incorrect_format_id')
 			.set('Accept', 'application/json')
 			.expect('Content-Type', /json/)
 			.expect(422)
@@ -119,6 +119,32 @@ describe('PUT /api/pizzas/:id', () => {
 				expect(response.body).toHaveProperty('title');
 				expect(response.body.title).toBe('Пицца');
 			}));
+	it('responds with an invalid id error', async () => {
+		request(app)
+			.put('/api/pizzas/incorrect_format_id')
+			.set('Accept', 'application/json')
+			.expect('Content-Type', /json/)
+			.expect(422)
+			.then((response) => {
+				expect(response.body).toHaveProperty('message');
+			});
+	});
+	it('responds with a not found error', async () => {
+		request(app)
+			.put('/api/pizzas/639dadb976b8603fcc1111eb')
+			.set('Accept', 'application/json')
+			.send({
+				currentPrice: 100,
+				image: 'https://cdn.fishki.net/upload/post/2020/11/11/3470626/324e458e86be1f4ab97ee5a667f8fa1a.jpg',
+				title: 'Пицца',
+				types: ['Сырная'],
+			})
+			.expect('Content-Type', /json/)
+			.expect(404)
+			.then((response) => {
+				expect(response.body).toHaveProperty('message');
+			});
+	});
 });
 
 describe('GET /api/pizzas', () => {
