@@ -55,6 +55,33 @@ class PizzaHandler {
 			next(error);
 		}
 	}
+
+	public static async updateOne(
+		req: Request<ParamsWithId, PizzaWithId, PizzaWithId>,
+		res: Response<PizzaWithId>,
+		next: NextFunction
+	): Promise<void> {
+		try {
+			const result = await Pizzas.findOneAndUpdate(
+				{
+					_id: new ObjectId(req.params.id),
+				},
+				{
+					$set: req.body,
+				},
+				{
+					returnDocument: 'after',
+				}
+			);
+			if (!result.value) {
+				res.status(404);
+				throw new Error(`Pizza with id ${req.params.id} not found`);
+			}
+			res.json(result.value);
+		} catch (error) {
+			next(error);
+		}
+	}
 }
 
 export default PizzaHandler;
