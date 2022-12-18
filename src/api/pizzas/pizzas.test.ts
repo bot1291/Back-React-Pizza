@@ -22,3 +22,15 @@ describe('GET /api/pizzas', () => {
 				expect(response.body.length).toBe(0);
 			}));
 });
+
+describe('GET /api/pizzas/:id', () => {
+	it('responds with a not found error', async () =>
+		request(app)
+			.get(`/api/pizzas/639dadb976b8603fcc1111eb`)
+			.set('Accept', 'application/json')
+			.expect('Content-Type', /json/)
+			.expect(422)
+			.then((response) => {
+				expect(response.body).toHaveProperty('message');
+			}));
+});

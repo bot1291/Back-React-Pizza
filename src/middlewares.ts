@@ -18,7 +18,8 @@ export function notFound(
 export function errorHandler(
 	err: Error,
 	_req: Request,
-	res: Response<ErrorResponse>
+	res: Response<ErrorResponse>,
+	_next: NextFunction
 ): void {
 	const statusCode = res.statusCode !== 200 ? res.statusCode : 500;
 	res.status(statusCode);
@@ -45,6 +46,7 @@ export const validateRequest = (validators: RequestValidators) => {
 			if (validators.body) {
 				req.body = await validators.body.parseAsync(req.body);
 			}
+			next();
 		} catch (error) {
 			if (error instanceof ZodError) {
 				res.status(422);
