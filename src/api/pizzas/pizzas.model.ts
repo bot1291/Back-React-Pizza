@@ -10,10 +10,13 @@ export const SizeAndPrice = z.object({
 });
 
 export const Pizza = z.object({
-	currentPrice: z.number(),
+	currentPrice: z.number().default(0),
 	image: z.string().url(),
 	title: z.string(),
-	rating: z.number().max(1, { message: 'Rating must have 1 number' }),
+	rating: z
+		.number()
+		.max(1, { message: 'Rating must have 1 number' })
+		.default(0),
 	types: z
 		.string()
 		.array()
@@ -21,11 +24,19 @@ export const Pizza = z.object({
 	possibleDoughs: z
 		.string()
 		.array()
-		.min(1, { message: 'Possible doughs must have at least 1 dough' }),
-	sizesAndPrices: SizeAndPrice.array().min(1, {
-		message:
-			'Size and price must have at least 1 dependency between each other',
-	}),
+		.min(1, { message: 'Possible doughs must have at least 1 dough' })
+		.default(['тонкое', 'традиционное']),
+	sizesAndPrices: SizeAndPrice.array()
+		.min(1, {
+			message:
+				'Size and price must have at least 1 dependency between each other',
+		})
+		.default([
+			{
+				size: '26',
+				price: 0,
+			},
+		]),
 });
 
 export type Pizza = z.infer<typeof Pizza>;
