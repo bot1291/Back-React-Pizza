@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { validateRequest } from '../../middlewares';
-import { Pizza } from './pizzas.model';
 import PizzaHandler from './pizzas.handler';
+import { ParamsWithId } from '../../interfaces/ParamsWithId';
 
 const router = Router();
 
@@ -9,7 +9,7 @@ router.get('/', PizzaHandler.getAll);
 router.get(
 	'/:id',
 	validateRequest({
-		params: Pizza,
+		params: ParamsWithId,
 	}),
 	PizzaHandler.getOne
 );
@@ -17,13 +17,13 @@ router.post('/');
 router.put(
 	'/:id',
 	validateRequest({
-		params: Pizza,
+		params: ParamsWithId,
 	})
 );
 router.delete(
 	'/:id',
 	validateRequest({
-		params: Pizza,
+		params: ParamsWithId,
 	})
 );
 

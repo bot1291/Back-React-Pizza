@@ -29,6 +29,15 @@ describe('GET /api/pizzas/:id', () => {
 			.get(`/api/pizzas/639dadb976b8603fcc1111eb`)
 			.set('Accept', 'application/json')
 			.expect('Content-Type', /json/)
+			.expect(404)
+			.then((response) => {
+				expect(response.body).toHaveProperty('message');
+			}));
+	it('responds with an incorrect error id', async () =>
+		request(app)
+			.get(`/api/pizzas/id_that_dont_exist`)
+			.set('Accept', 'application/json')
+			.expect('Content-Type', /json/)
 			.expect(422)
 			.then((response) => {
 				expect(response.body).toHaveProperty('message');

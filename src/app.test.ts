@@ -2,13 +2,15 @@ import request from 'supertest';
 import app from './app';
 
 describe('app', () => {
-	it('responds with a not found message', (done) => {
+	it('responds with a not found message', async () =>
 		request(app)
 			.get('/what-is-this-even')
 			.set('Accept', 'application/json')
 			.expect('Content-Type', /json/)
-			.expect(404, done);
-	});
+			.expect(404)
+			.then((response) => {
+				expect(response.body).toHaveProperty('message');
+			}));
 });
 
 describe('GET /', () => {
