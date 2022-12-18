@@ -15,7 +15,8 @@ export const Pizza = z.object({
 	title: z.string(),
 	rating: z
 		.number()
-		.max(1, { message: 'Rating must have 1 number' })
+		.gte(0, { message: 'Rating must be more or equal 0' })
+		.lte(5, { message: 'Rating must be lower or equal 5' })
 		.default(0),
 	types: z
 		.string()
