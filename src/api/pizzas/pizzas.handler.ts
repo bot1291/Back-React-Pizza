@@ -1,5 +1,6 @@
 import { Response, Request, NextFunction } from 'express';
 import { ObjectId } from 'mongodb';
+import DeletedPizzaResponse from '../../interfaces/DeletedPizzaResponse';
 import { ParamsWithId } from '../../interfaces/ParamsWithId';
 import { Pizza, Pizzas, PizzaWithId } from './pizzas.model';
 
@@ -78,6 +79,31 @@ class PizzaHandler {
 				throw new Error(`Pizza with id ${req.params.id} not found`);
 			}
 			res.json(result.value);
+		} catch (error) {
+			next(error);
+		}
+	}
+
+	public static async deleteOne(
+		req: Request<ParamsWithId, DeletedPizzaResponse, {}>,
+		res: Response<DeletedPizzaResponse>,
+		next: NextFunction
+	): Promise<void> {
+		try {
+			const result = await Pizzas.findOneAndDelete({
+				_id: new ObjectId(req.params.id),
+			});
+			if (!result.value) {
+				res.status(404);
+				throw new Error(
+					`Pizza with id ${req.params.id} not found or already deleted`
+				);
+			}
+			res.status(204);
+			res.json({
+				message: 'Pizza successfully has deleted',
+				id: req.params.id,
+			});
 		} catch (error) {
 			next(error);
 		}

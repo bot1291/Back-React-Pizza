@@ -25,6 +25,7 @@ router.put(
 	'/:id',
 	validateRequest({
 		params: ParamsWithId,
+		body: Pizza,
 	}),
 	PizzaHandler.updateOne
 );
@@ -32,7 +33,8 @@ router.delete(
 	'/:id',
 	validateRequest({
 		params: ParamsWithId,
-	})
+	}),
+	PizzaHandler.deleteOne
 );
 
 export default router;
