@@ -1,12 +1,12 @@
 import { Response, Request, NextFunction } from 'express';
 import { ObjectId } from 'mongodb';
 import { ParamsWithId } from '../../interfaces/ParamsWithId';
-import { Pizzas, PizzasWithId } from './pizzas.model';
+import { Pizza, Pizzas, PizzaWithId } from './pizzas.model';
 
 class PizzaHandler {
 	public static async getAll(
 		_req: Request,
-		res: Response<PizzasWithId[]>,
+		res: Response<PizzaWithId[]>,
 		next: NextFunction
 	): Promise<void> {
 		try {
@@ -18,8 +18,8 @@ class PizzaHandler {
 	}
 
 	public static async getOne(
-		req: Request<ParamsWithId, PizzasWithId, {}>,
-		res: Response<PizzasWithId>,
+		req: Request<ParamsWithId, PizzaWithId, {}>,
+		res: Response<PizzaWithId>,
 		next: NextFunction
 	): Promise<void> {
 		try {
@@ -31,6 +31,26 @@ class PizzaHandler {
 				throw new Error(`Pizzas with id ${req.params.id} not found`);
 			}
 			res.json(result);
+		} catch (error) {
+			next(error);
+		}
+	}
+
+	public static async createOne(
+		req: Request<{}, PizzaWithId, Pizza>,
+		res: Response<PizzaWithId>,
+		next: NextFunction
+	): Promise<void> {
+		try {
+			const result = await Pizzas.insertOne(req.body);
+			if (!result.insertedId) {
+				throw new Error('Error inserting pizza');
+			}
+			res.status(201);
+			res.json({
+				...req.body,
+				_id: result.insertedId,
+			});
 		} catch (error) {
 			next(error);
 		}

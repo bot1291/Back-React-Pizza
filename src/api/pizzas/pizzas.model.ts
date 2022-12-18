@@ -29,5 +29,5 @@ export const Pizza = z.object({
 });
 
 export type Pizza = z.infer<typeof Pizza>;
-export type PizzasWithId = WithId<Pizza>;
+export type PizzaWithId = WithId<Pizza>;
 export const Pizzas = database.collection<Pizza>(collection);

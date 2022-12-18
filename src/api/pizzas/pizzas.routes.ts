@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { validateRequest } from '../../middlewares';
 import PizzaHandler from './pizzas.handler';
 import { ParamsWithId } from '../../interfaces/ParamsWithId';
+import { Pizza } from './pizzas.model';
 
 const router = Router();
 
@@ -13,7 +14,13 @@ router.get(
 	}),
 	PizzaHandler.getOne
 );
-router.post('/');
+router.post(
+	'/',
+	validateRequest({
+		body: Pizza,
+	}),
+	PizzaHandler.createOne
+);
 router.put(
 	'/:id',
 	validateRequest({
