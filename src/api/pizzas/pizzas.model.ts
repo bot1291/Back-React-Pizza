@@ -2,7 +2,7 @@ import { WithId } from 'mongodb';
 import * as z from 'zod';
 import { database } from '../../database';
 
-const collection = process.env.NODE_ENV ? 'pizzas' : 'test';
+const collection = process.env.NODE_ENV !== 'test' ? 'pizzas' : 'test';
 
 export const SizeAndPrice = z.object({
 	size: z.string(),

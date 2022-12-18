@@ -164,20 +164,6 @@ describe('GET /api/pizzas', () => {
 });
 
 describe('DELETE /api/pizzas/:id', () => {
-	it('responds with an successful deletion of a message', async () =>
-		request(app)
-			.delete(`/api/pizzas/${id}`)
-			.set('Accept', 'application/json')
-			.expect('Content-Type', /json/)
-			.expect(200)
-			.then((response) => {
-				expect(response.body).toHaveProperty('message');
-				expect(response.body.message).toBe(
-					'Pizza successfully has deleted'
-				);
-				expect(response.body).toHaveProperty('id');
-				expect(response.body.id).toBe(id);
-			}));
 	it('responds with an incorrect id error', async () =>
 		request(app)
 			.delete('/api/pizzas/incorrect_format_id')
