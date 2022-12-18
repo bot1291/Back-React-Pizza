@@ -33,15 +33,7 @@ describe('POST /api/pizzas', () => {
 				currentPrice: 100,
 				image: 'https://cdn.fishki.net/upload/post/2020/11/11/3470626/324e458e86be1f4ab97ee5a667f8fa1a.jpg',
 				title: 'Пицца',
-				rating: 5,
 				types: ['Сырная'],
-				possibleDoughs: ['тонкое'],
-				sizesAndPrices: [
-					{
-						size: '30',
-						price: 100,
-					},
-				],
 			})
 			.expect('Content-Type', /json/)
 			.expect(201)
@@ -50,6 +42,9 @@ describe('POST /api/pizzas', () => {
 				id = response.body._id;
 				expect(response.body).toHaveProperty('currentPrice');
 				expect(response.body.currentPrice).toBe(100);
+				expect(response.body).toHaveProperty('rating');
+				expect(response.body.rating).toBe(0);
+				expect(response.body).toHaveProperty('possibleDoughs');
 				expect(response.body).toHaveProperty('title');
 				expect(response.body.title).toBe('Пицца');
 				expect(response.body).toHaveProperty('sizesAndPrices');
@@ -101,5 +96,40 @@ describe('GET /api/pizzas/:id', () => {
 			.expect(422)
 			.then((response) => {
 				expect(response.body).toHaveProperty('message');
+			}));
+});
+
+describe('PUT /api/pizzas/:id', () => {
+	it('responds with an updated pizza', async () =>
+		request(app)
+			.put(`/api/pizzas/${id}`)
+			.set('Accept', 'application/json')
+			.send({
+				rating: 3,
+				types: ['Сырная', 'Мясная'],
+			})
+			.expect('Content-Type', /json/)
+			.expect(200)
+			.then((response) => {
+				expect(response.body).toHaveProperty('_id');
+				expect(response.body._id).toBe(id);
+				expect(response.body).toHaveProperty('rating');
+				expect(response.body.rating).toBe(3);
+				expect(response.body).toHaveProperty('types');
+				expect(response.body).toHaveProperty('title');
+				expect(response.body.title).toBe('Пицца');
+			}));
+});
+
+describe('GET /api/pizzas', () => {
+	it('responds with an array of pizzas after manipulations', async () =>
+		request(app)
+			.get('/api/pizzas')
+			.set('Accept', 'application/json')
+			.expect('Content-Type', /json/)
+			.expect(200)
+			.then((response) => {
+				expect(response.body).toHaveProperty('length');
+				expect(response.body.length).toBe(1);
 			}));
 });
