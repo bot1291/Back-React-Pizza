@@ -2,7 +2,7 @@ import request from 'supertest';
 import app from '../app';
 
 describe('GET /api', () => {
-	it('responds with a json message', async () => {
+	it('responds with a json message', async () =>
 		request(app)
 			.get('/api')
 			.set('Accept', 'application/json')
@@ -11,6 +11,5 @@ describe('GET /api', () => {
 			.then((response) => {
 				expect(response.body).toHaveProperty('message');
 				expect(response.body.message).toBe('Api route');
-			});
-	});
+			}));
 });

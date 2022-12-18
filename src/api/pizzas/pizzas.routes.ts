@@ -5,13 +5,12 @@ import PizzaHandler from './pizzas.handler';
 
 const router = Router();
 
-router.get('/');
+router.get('/', PizzaHandler.getAll);
 router.get(
 	'/:id',
 	validateRequest({
 		params: Pizza,
-	}),
-	PizzaHandler.getAll
+	})
 );
 router.post('/');
 router.put(
