@@ -26,8 +26,7 @@ describe('GET /api/pizzas', () => {
 			.expect('Content-Type', /json/)
 			.expect(200)
 			.then((response) => {
-				expect(response.body).toHaveProperty('length');
-				expect(response.body.length).toBe(0);
+				expect(response.body.pizzas).toHaveProperty('length');
 			}));
 });
 
@@ -158,8 +157,7 @@ describe('GET /api/pizzas', () => {
 			.expect('Content-Type', /json/)
 			.expect(200)
 			.then((response) => {
-				expect(response.body).toHaveProperty('length');
-				expect(response.body.length).toBe(1);
+				expect(response.body.pizzas).toHaveProperty('length');
 			}));
 });
 

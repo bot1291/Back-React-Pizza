@@ -1,17 +1,24 @@
 import { Response, Request, NextFunction } from 'express';
 import { ObjectId } from 'mongodb';
+import getAllTypes from '../../helpers/getAllTypes';
 import DeletedPizzaResponse from '../../interfaces/DeletedPizzaResponse';
 import { ParamsWithId } from '../../interfaces/ParamsWithId';
+import PizzasAndTypes from '../../interfaces/PizzasAndTypes';
 import { Pizza, Pizzas, PizzaWithId } from './pizzas.model';
 
 class PizzaHandler {
 	public static async getAll(
 		_req: Request,
-		res: Response<PizzaWithId[]>,
+		res: Response<PizzasAndTypes>,
 		next: NextFunction
 	): Promise<void> {
 		try {
-			const result = await Pizzas.find().toArray();
+			const pizzas = await Pizzas.find().toArray();
+
+			const result = {
+				pizzas,
+				types: await getAllTypes(),
+			};
 			res.json(result);
 		} catch (error) {
 			next(error);
